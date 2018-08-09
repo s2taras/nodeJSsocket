@@ -23,5 +23,19 @@ module.exports = io => {
 			});
 
 		});
+
+		socket.on('receiveHistory', () => {
+			MessageModel
+			.find({})
+			.sort({date: -1})
+			.limit(50)
+			.sort({date: 1})
+			.lean()
+			.exec((err, messages) => {
+				if (!err) {
+					socket.emit('history', messages);
+				}
+			});
+		});
 	});
 }
